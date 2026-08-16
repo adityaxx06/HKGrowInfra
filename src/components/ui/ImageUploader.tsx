@@ -6,7 +6,7 @@ import { imageUrl } from '@/lib/imageUrl';
 import type { ImageEntry } from '@/types/database';
 
 interface ImageUploaderProps {
-  /** Storage path prefix, e.g. `properties/<uuid>` — images are stored under `media/<entityPath>/...`. */
+  /** Storage path prefix, e.g. `properties/<uuid>` — images are stored in the `media` bucket. */
   entityPath: string;
   images: ImageEntry[];
   onChange: (images: ImageEntry[]) => void;
@@ -21,7 +21,7 @@ const COMPRESSION_OPTIONS = {
 };
 
 /**
- * Uploads images to the `media` bucket under `media/<entityPath>/<filename>`,
+ * Uploads images to the `media` bucket under `<entityPath>/<filename>`,
  * compresses client-side before upload (per D-stack: browser-image-compression),
  * and maintains the `images` JSONB array shape: [{ path, alt, sort }].
  *
@@ -64,7 +64,7 @@ export function ImageUploader({ entityPath, images, onChange, maxImages = 12 }: 
         }
 
         newEntries.push({
-          path: `media/${path}`,
+          path,
           alt: '',
           sort: images.length + newEntries.length,
         });
