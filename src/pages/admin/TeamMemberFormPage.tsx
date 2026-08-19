@@ -28,6 +28,7 @@ export function TeamMemberFormPage() {
   const isSaving = isCreating || isUpdating;
 
   const [photo, setPhoto] = useState<ImageEntry[]>([]);
+  const [initialPhoto, setInitialPhoto] = useState<ImageEntry[]>([]);
 
   const {
     register, handleSubmit, reset,
@@ -53,10 +54,17 @@ export function TeamMemberFormPage() {
         is_founder:    member.is_founder,
       });
       if (member.photo_path) {
-        setPhoto([{ path: member.photo_path, alt: member.full_name, sort: 0 }]);
+        const savedPhoto = [{ path: member.photo_path, alt: member.full_name, sort: 0 }];
+        setPhoto(savedPhoto);
+        setInitialPhoto(savedPhoto);
+      } else {
+        setPhoto([]);
+        setInitialPhoto([]);
       }
     }
   }, [member, reset]);
+
+  const photoChanged = JSON.stringify(photo) !== JSON.stringify(initialPhoto);
 
   function onSubmit(values: TeamMemberFormValues) {
     const payload = {
@@ -137,7 +145,7 @@ export function TeamMemberFormPage() {
           </FormSection>
 
           <div className="flex items-center gap-3 border-t border-gray-100 pt-6">
-            <Button type="submit" isLoading={isSaving} disabled={!isDirty && isEdit}>
+            <Button type="submit" isLoading={isSaving} disabled={!isDirty && !photoChanged && isEdit}>
               {isEdit ? 'Save Changes' : 'Add Team Member'}
             </Button>
             <Button type="button" variant="outline" onClick={() => navigate(ROUTES.admin.team.list)}>

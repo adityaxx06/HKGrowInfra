@@ -19,6 +19,7 @@ export function imageUrl(
   bucket: Bucket = 'media'
 ): string {
   if (!path) return '';
+  if (/^https?:\/\//i.test(path)) return path;
 
   let cleanPath = path.replace(/^\/+/, '');
   if (cleanPath.startsWith(`${bucket}/`)) {

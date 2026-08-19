@@ -30,6 +30,7 @@ export function BlogFormPage() {
   const isSaving = isCreating || isUpdating;
 
   const [coverImage, setCoverImage] = useState<ImageEntry[]>([]);
+  const [initialCoverImage, setInitialCoverImage] = useState<ImageEntry[]>([]);
 
   const {
     register, handleSubmit, control, reset,
@@ -56,10 +57,17 @@ export function BlogFormPage() {
         canonical_url:       post.canonical_url ?? '',
       });
       if (post.cover_image_path) {
-        setCoverImage([{ path: post.cover_image_path, alt: post.cover_image_alt ?? '', sort: 0 }]);
+        const savedCoverImage = [{ path: post.cover_image_path, alt: post.cover_image_alt ?? '', sort: 0 }];
+        setCoverImage(savedCoverImage);
+        setInitialCoverImage(savedCoverImage);
+      } else {
+        setCoverImage([]);
+        setInitialCoverImage([]);
       }
     }
   }, [post, reset]);
+
+  const coverImageChanged = JSON.stringify(coverImage) !== JSON.stringify(initialCoverImage);
 
   function onSubmit(values: BlogPostFormValues) {
     const coverPath = coverImage[0]?.path ?? null;
@@ -171,7 +179,7 @@ export function BlogFormPage() {
         </FormSection>
 
         <div className="flex items-center gap-3 border-t border-gray-100 pt-6">
-          <Button type="submit" isLoading={isSaving} disabled={!isDirty && isEdit}>
+          <Button type="submit" isLoading={isSaving} disabled={!isDirty && !coverImageChanged && isEdit}>
             {isEdit ? 'Save Changes' : 'Create Post'}
           </Button>
           <Button type="button" variant="outline" onClick={() => navigate(ROUTES.admin.blog.list)}>

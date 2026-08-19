@@ -59,6 +59,7 @@ export function PropertyFormPage() {
   const isSaving = isCreating || isUpdating;
 
   const [images, setImages] = useState<ImageEntry[]>([]);
+  const [initialImages, setInitialImages] = useState<ImageEntry[]>([]);
 
   const {
     register, handleSubmit, control, reset,
@@ -107,9 +108,13 @@ export function PropertyFormPage() {
         seo_title:        property.seo_title ?? '',
         seo_description:  property.seo_description ?? '',
       });
-      setImages(property.images ?? []);
+      const savedImages = property.images ?? [];
+      setImages(savedImages);
+      setInitialImages(savedImages);
     }
   }, [property, reset]);
+
+  const imagesChanged = JSON.stringify(images) !== JSON.stringify(initialImages);
 
   function onSubmit(values: PropertyFormValues) {
     const payload = { ...values, project_id: values.project_id || null, images };
@@ -297,7 +302,7 @@ export function PropertyFormPage() {
         </FormSection>
 
         <div className="flex items-center gap-3 border-t border-gray-100 pt-6">
-          <Button type="submit" isLoading={isSaving} disabled={!isDirty && isEdit}>
+          <Button type="submit" isLoading={isSaving} disabled={!isDirty && !imagesChanged && isEdit}>
             {isEdit ? 'Save Changes' : 'Create Property'}
           </Button>
           <Button type="button" variant="outline" onClick={() => navigate(ROUTES.admin.properties.list)}>

@@ -29,6 +29,7 @@ export function ProjectFormPage() {
   const isSaving = isCreating || isUpdating;
 
   const [images, setImages] = useState<ImageEntry[]>([]);
+  const [initialImages, setInitialImages] = useState<ImageEntry[]>([]);
 
   const {
     register, handleSubmit, control, reset,
@@ -64,9 +65,13 @@ export function ProjectFormPage() {
         seo_title:           project.seo_title ?? '',
         seo_description:     project.seo_description ?? '',
       });
-      setImages(project.images ?? []);
+      const savedImages = project.images ?? [];
+      setImages(savedImages);
+      setInitialImages(savedImages);
     }
   }, [project, reset]);
+
+  const imagesChanged = JSON.stringify(images) !== JSON.stringify(initialImages);
 
   function onSubmit(values: ProjectFormValues) {
     const payload = { ...values, images };
@@ -188,7 +193,7 @@ export function ProjectFormPage() {
           </FormSection>
 
           <div className="flex items-center gap-3 border-t border-gray-100 pt-6">
-            <Button type="submit" isLoading={isSaving} disabled={!isDirty && isEdit}>
+            <Button type="submit" isLoading={isSaving} disabled={!isDirty && !imagesChanged && isEdit}>
               {isEdit ? 'Save Changes' : 'Create Project'}
             </Button>
             <Button type="button" variant="outline" onClick={() => navigate(ROUTES.admin.projects.list)}>

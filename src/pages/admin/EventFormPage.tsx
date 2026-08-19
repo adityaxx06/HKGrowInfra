@@ -64,6 +64,7 @@ export function EventFormPage() {
   });
 
   const [images, setImages] = useState<ImageEntry[]>([]);
+  const [initialImages, setInitialImages] = useState<ImageEntry[]>([]);
 
   const {
     register, handleSubmit, reset,
@@ -96,9 +97,13 @@ export function EventFormPage() {
         seo_title:             event.seo_title ?? '',
         seo_description:       event.seo_description ?? '',
       });
-      setImages(event.images ?? []);
+      const savedImages = event.images ?? [];
+      setImages(savedImages);
+      setInitialImages(savedImages);
     }
   }, [event, reset]);
+
+  const imagesChanged = JSON.stringify(images) !== JSON.stringify(initialImages);
 
   function onSubmit(values: EventFormValues) {
     const payload = {
@@ -232,7 +237,7 @@ export function EventFormPage() {
           </FormSection>
 
           <div className="flex items-center gap-3 border-t border-gray-100 pt-6">
-            <Button type="submit" isLoading={isSaving} disabled={!isDirty && isEdit}>
+            <Button type="submit" isLoading={isSaving} disabled={!isDirty && !imagesChanged && isEdit}>
               {isEdit ? 'Save Changes' : 'Create Event'}
             </Button>
             <Button type="button" variant="outline" onClick={() => navigate(ROUTES.admin.events.list)}>
