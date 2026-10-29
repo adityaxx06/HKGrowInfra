@@ -40,7 +40,16 @@ export function Footer() {
   });
 
   const content = (footerBlock?.content ?? {}) as FooterContent;
-  const quickLinks = content.quick_links ?? [];
+  const defaultQuickLinks = [
+    { label: 'Properties', url: '/properties' },
+    { label: 'Projects', url: '/projects' },
+    { label: 'About Us', url: '/about' },
+    { label: 'Achievements', url: '/achievements' },
+    { label: 'Events', url: '/events' },
+    { label: 'Blog', url: '/blog' },
+    { label: 'Contact', url: '/contact' },
+  ];
+  const quickLinks = content.quick_links && content.quick_links.length > 0 ? content.quick_links : defaultQuickLinks;
   const legalLinks = content.legal_links ?? [];
 
   return (

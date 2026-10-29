@@ -1,30 +1,64 @@
-import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Menu, X, Phone, MessageCircle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Menu, X, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { supabase } from '@/lib/supabase';
 import type { WebsiteSettings } from '@/types/database';
 
-const NAV_LINKS = [
+const MAIN_LINKS = [
   { label: 'Home',       to: '/' },
   { label: 'Properties', to: '/properties' },
   { label: 'Projects',   to: '/projects' },
   { label: 'About',      to: '/about' },
-  { label: 'Events',     to: '/events' },
-  { label: 'Blog',       to: '/blog' },
   { label: 'Contact',    to: '/contact' },
+];
+
+const DROPDOWN_LINKS = [
+  { label: 'Achievements', to: '/achievements' },
+  { label: 'Events',       to: '/events' },
+  { label: 'Blog',         to: '/blog' },
+];
+
+const ALL_MOBILE_LINKS = [
+  { label: 'Home',         to: '/' },
+  { label: 'Properties',   to: '/properties' },
+  { label: 'Projects',     to: '/projects' },
+  { label: 'About',        to: '/about' },
+  { label: 'Achievements', to: '/achievements' },
+  { label: 'Events',       to: '/events' },
+  { label: 'Blog',         to: '/blog' },
+  { label: 'Contact',      to: '/contact' },
 ];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close dropdown on route change or click outside
+  useEffect(() => {
+    setDropdownOpen(false);
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const { data: settings } = useQuery({
@@ -40,6 +74,8 @@ export function Navbar() {
     },
   });
 
+  const isDropdownActive = DROPDOWN_LINKS.some((l) => location.pathname === l.to);
+
   return (
     <header
       className={clsx(
@@ -50,12 +86,12 @@ export function Navbar() {
       <nav className="container-page flex h-20 items-center justify-between" aria-label="Main navigation">
         <NavLink to="/" className="flex items-center gap-3 font-display text-lg font-medium text-navy-800">
           <img src="/logo.png" alt="HK Grow Infra" className="h-10 w-10 rounded-sm object-contain" />
-          <span className="hidden sm:inline">HK  Grow Infra</span>
+          <span className="hidden sm:inline">HK Grow Infra</span>
         </NavLink>
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-1 lg:flex">
-          {NAV_LINKS.map((link) => (
+          {MAIN_LINKS.map((link) => (
             <li key={link.to}>
               <NavLink
                 to={link.to}
@@ -77,6 +113,40 @@ export function Navbar() {
               </NavLink>
             </li>
           ))}
+
+          {/* Bootstrap Dropdown ("More") */}
+          <li className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              className={clsx(
+                'flex items-center gap-1.5 px-4 py-2 text-sm font-medium tracking-wide transition-colors duration-300',
+                isDropdownActive || dropdownOpen ? 'text-navy-800' : 'text-ink-secondary hover:text-navy-800',
+              )}
+              aria-expanded={dropdownOpen}
+            >
+              More
+              <ChevronDown className={clsx('h-4 w-4 transition-transform duration-200', dropdownOpen && 'rotate-180')} />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 rounded-xl border border-gray-100 bg-white py-2 shadow-xl ring-1 ring-black/5">
+                {DROPDOWN_LINKS.map((link) => (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    className={({ isActive }) =>
+                      clsx(
+                        'block px-4 py-2.5 text-sm font-medium transition-colors',
+                        isActive ? 'bg-navy-50 text-navy-700 font-semibold' : 'text-ink-secondary hover:bg-gray-50 hover:text-navy-800',
+                      )
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
+              </div>
+            )}
+          </li>
         </ul>
 
         {/* Desktop CTAs */}
@@ -122,7 +192,7 @@ export function Navbar() {
             className="overflow-hidden border-t border-gray-100 bg-white lg:hidden"
           >
             <ul className="container-page flex flex-col py-2">
-              {NAV_LINKS.map((link, i) => (
+              {ALL_MOBILE_LINKS.map((link, i) => (
                 <motion.li
                   key={link.to}
                   initial={{ opacity: 0, x: -12 }}
