@@ -11,6 +11,7 @@ import { PropertyDetailPage }   from '@/pages/public/PropertyDetailPage';
 import { ProjectsListPage as PublicProjectsListPage } from '@/pages/public/ProjectsListPage';
 import { ProjectDetailPage }    from '@/pages/public/ProjectDetailPage';
 import { AboutPage }            from '@/pages/public/AboutPage';
+import { AchievementsPage }     from '@/pages/public/AchievementsPage';
 import { EventsListPage as PublicEventsListPage } from '@/pages/public/EventsListPage';
 import { EventDetailPage }      from '@/pages/public/EventDetailPage';
 import { BlogListPage as PublicBlogListPage } from '@/pages/public/BlogListPage';
@@ -27,6 +28,8 @@ import { ProjectsListPage }     from '@/pages/admin/ProjectsListPage';
 import { ProjectFormPage }      from '@/pages/admin/ProjectFormPage';
 import { TeamListPage }         from '@/pages/admin/TeamListPage';
 import { TeamMemberFormPage }   from '@/pages/admin/TeamMemberFormPage';
+import { AchievementsListPage } from '@/pages/admin/AchievementsListPage';
+import { AchievementFormPage }  from '@/pages/admin/AchievementFormPage';
 import { EventsListPage }       from '@/pages/admin/EventsListPage';
 import { EventFormPage }        from '@/pages/admin/EventFormPage';
 import { BlogListPage }         from '@/pages/admin/BlogListPage';
@@ -49,6 +52,7 @@ export const router = createBrowserRouter([
       { path: '/projects',         element: <PublicProjectsListPage /> },
       { path: '/projects/:slug',   element: <ProjectDetailPage /> },
       { path: '/about',            element: <AboutPage /> },
+      { path: '/achievements',     element: <AchievementsPage /> },
       { path: '/events',           element: <PublicEventsListPage /> },
       { path: '/events/:slug',     element: <EventDetailPage /> },
       { path: '/blog',             element: <PublicBlogListPage /> },
@@ -88,6 +92,11 @@ export const router = createBrowserRouter([
           { path: 'team',                  element: <TeamListPage /> },
           { path: 'team/new',              element: <TeamMemberFormPage /> },
           { path: 'team/:id',              element: <TeamMemberFormPage /> },
+
+          // Achievements
+          { path: 'achievements',          element: <AchievementsListPage /> },
+          { path: 'achievements/new',      element: <AchievementFormPage /> },
+          { path: 'achievements/:id',      element: <AchievementFormPage /> },
 
           // Events
           { path: 'events',                element: <EventsListPage /> },

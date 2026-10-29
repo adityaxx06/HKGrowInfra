@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Linkedin, Instagram, Twitter, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Linkedin, Instagram, Twitter, ArrowRight, ShieldCheck, Building2, FileText, Award, Calendar } from 'lucide-react';
 import { usePublicTeamMembers } from '@/hooks/useTeam';
 import { useContentBlock, useSettings } from '@/hooks/useSettings';
 import { QueryBoundary } from '@/components/shared/QueryBoundary';
@@ -71,37 +71,54 @@ export function AboutPage() {
 
       {/* ── Corporate Details / CIN Section ─────────────────────────────────── */}
       {(settings?.cin_number || settings?.gst_number || settings?.rera_number || settings?.established_year) && (
-        <section className="bg-surface py-20 border-y border-gray-200/60">
-          <div className="container-page">
-            <FadeInWhenVisible className="mb-12 text-center">
-              <p className="eyebrow mb-3 justify-center">Corporate Credibility</p>
-              <h2 className="font-display text-2xl font-medium text-navy-800 lg:text-3xl">
+        <section className="bg-surface py-20 border-y border-gray-200/60 relative overflow-hidden">
+          <div className="container-page relative z-10">
+            <FadeInWhenVisible className="mb-14 text-center">
+              <span className="inline-block px-3.5 py-1 mb-3 text-xs font-semibold tracking-widest text-gold-700 uppercase bg-gold-100/70 rounded-full">
+                Corporate Credibility
+              </span>
+              <h2 className="font-display text-3xl font-medium text-navy-800 lg:text-4xl">
                 Registration &amp; Legal Details
               </h2>
+              <p className="mt-3 text-ink-secondary max-w-lg mx-auto text-sm">
+                Transparent and fully compliant operations backed by government registrations.
+              </p>
             </FadeInWhenVisible>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {settings?.cin_number && (
-                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">CIN Number</p>
-                  <p className="mt-2 font-mono text-sm font-medium text-navy-800">{settings.cin_number}</p>
+                <div className="group rounded-xl border border-gray-200/80 bg-white p-7 shadow-card hover:border-gold-400 hover:shadow-lg transition-all duration-300">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gold-50 text-gold-600 mb-5 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                    <Building2 className="h-5 w-5" />
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-secondary">CIN Number</p>
+                  <p className="mt-2 font-mono text-sm font-semibold text-navy-800 break-all">{settings.cin_number}</p>
                 </div>
               )}
               {settings?.gst_number && (
-                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">GST Number</p>
-                  <p className="mt-2 font-mono text-sm font-medium text-navy-800">{settings.gst_number}</p>
+                <div className="group rounded-xl border border-gray-200/80 bg-white p-7 shadow-card hover:border-gold-400 hover:shadow-lg transition-all duration-300">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gold-50 text-gold-600 mb-5 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-secondary">GST Number</p>
+                  <p className="mt-2 font-mono text-sm font-semibold text-navy-800 break-all">{settings.gst_number}</p>
                 </div>
               )}
               {settings?.rera_number && (
-                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">RERA Registration</p>
-                  <p className="mt-2 font-mono text-sm font-medium text-navy-800">{settings.rera_number}</p>
+                <div className="group rounded-xl border border-gray-200/80 bg-white p-7 shadow-card hover:border-gold-400 hover:shadow-lg transition-all duration-300">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gold-50 text-gold-600 mb-5 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                    <Award className="h-5 w-5" />
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-secondary">RERA Registration</p>
+                  <p className="mt-2 font-mono text-sm font-semibold text-navy-800 break-all">{settings.rera_number}</p>
                 </div>
               )}
               {settings?.established_year && (
-                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">Established Year</p>
-                  <p className="mt-2 font-display text-lg font-medium text-navy-800">{settings.established_year}</p>
+                <div className="group rounded-xl border border-gray-200/80 bg-white p-7 shadow-card hover:border-gold-400 hover:shadow-lg transition-all duration-300">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gold-50 text-gold-600 mb-5 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                    <Calendar className="h-5 w-5" />
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-ink-secondary">Established Year</p>
+                  <p className="mt-2 font-display text-xl font-semibold text-navy-800">{settings.established_year}</p>
                 </div>
               )}
             </div>
