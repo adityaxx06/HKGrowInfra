@@ -195,6 +195,20 @@ export interface TeamMember {
 export const TEAM_MEMBER_PUBLIC_COLUMNS =
   'id, full_name, position, department, bio, short_bio, display_email, photo_path, social_links, rank_order, is_founder';
 
+export interface TeamAchievement {
+  id: string;
+  title: string;
+  member_name: string;
+  position: string;
+  description: string;
+  achievement_date: string | null;
+  photo_paths: string[];
+  rank_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export type EventStatus = 'draft' | 'published' | 'cancelled';
 
 export interface EventItem {
