@@ -187,7 +187,7 @@ export function AboutPage() {
                       )}
                     </div>
                     <h3 className="font-display text-lg font-medium text-white">{member.full_name}</h3>
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-gold-300">{member.position}</p>
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-gold-300 whitespace-pre-line">{member.position}</p>
                     {member.short_bio && (
                       <p className="mt-3 text-sm leading-relaxed text-navy-300">{member.short_bio}</p>
                     )}

@@ -104,7 +104,7 @@ export function TeamMemberFormPage() {
           <FormSection title="Basic Info" description="Name, role, and department.">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input label="Full Name" required error={errors.full_name?.message} {...register('full_name')} />
-              <Input label="Position" required placeholder="Head of Sales" error={errors.position?.message} {...register('position')} />
+              <Textarea label="Position" required rows={2} placeholder="Managing Director&#10;& CEO" error={errors.position?.message} {...register('position')} />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input label="Department" placeholder="Sales, Marketing, Legal…" {...register('department')} />

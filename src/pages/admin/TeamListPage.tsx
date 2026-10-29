@@ -75,7 +75,7 @@ export function TeamListPage() {
                   )}
                 </div>
               </td>
-              <td className="px-4 py-3 text-sm text-ink-secondary">{member.position}</td>
+              <td className="px-4 py-3 text-sm text-ink-secondary whitespace-pre-line">{member.position}</td>
               <td className="px-4 py-3 text-sm text-ink-secondary">{member.department ?? '—'}</td>
               <td className="px-4 py-3">
                 <Badge tone={member.is_active ? 'green' : 'gray'}>
