@@ -240,3 +240,17 @@ export const leadUpdateSchema = z.object({
 });
 
 export type LeadUpdateFormValues = z.infer<typeof leadUpdateSchema>;
+
+// ── Team Achievement ──────────────────────────────────────────────────────────
+
+export const achievementSchema = z.object({
+  title:            z.string().min(3).max(200),
+  member_name:      z.string().min(2).max(100),
+  position:         z.string().min(2).max(100),
+  description:      z.string().min(10),
+  achievement_date: z.string().optional(),
+  rank_order:       z.coerce.number().int().min(0).optional(),
+  is_active:        z.boolean().optional(),
+});
+
+export type AchievementFormValues = z.infer<typeof achievementSchema>;

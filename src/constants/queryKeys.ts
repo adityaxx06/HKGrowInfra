@@ -95,6 +95,14 @@ export const QUERY_KEYS = {
     latest: (count: number) => ['blog', 'latest', count] as const,
   },
 
+  // ── Team Achievements ─────────────────────────────────────────────────────
+  achievements: {
+    all: ['achievements'] as const,
+    list: () => ['achievements', 'list'] as const,
+    adminList: () => ['achievements', 'admin', 'list'] as const,
+    adminDetail: (id: string) => ['achievements', 'admin', 'detail', id] as const,
+  },
+
   // ── Leads ─────────────────────────────────────────────────────────────────
   leads: {
     all: ['leads'] as const,

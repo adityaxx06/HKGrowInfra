@@ -22,6 +22,8 @@ export const ROUTES = {
 
   about: '/about',
 
+  achievements: '/achievements',
+
   events: {
     list: '/events',
     detail: (slug: string) => `/events/${slug}`,
@@ -61,6 +63,12 @@ export const ROUTES = {
       list: '/admin/team',
       new: '/admin/team/new',
       edit: (id: string) => `/admin/team/${id}`,
+    },
+
+    achievements: {
+      list: '/admin/achievements',
+      new: '/admin/achievements/new',
+      edit: (id: string) => `/admin/achievements/${id}`,
     },
 
     events: {
