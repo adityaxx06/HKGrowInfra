@@ -85,6 +85,7 @@ export function AdminLayout() {
   // tapping a nav link, or navigating via breadcrumb/back button).
   useEffect(() => {
     setDrawerOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   // Lock body scroll while the drawer is open so the page behind it
