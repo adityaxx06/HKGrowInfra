@@ -199,6 +199,10 @@ export type LegalPageFormValues = z.infer<typeof legalPageSchema>;
 export const settingsSchema = z.object({
   company_name:     z.string().min(2).max(100),
   tagline:          z.string().max(200).optional(),
+  cin_number:       z.string().max(50).optional(),
+  gst_number:       z.string().max(50).optional(),
+  rera_number:      z.string().max(100).optional(),
+  established_year: z.string().max(20).optional(),
   mission:          z.string().optional(),
   vision:           z.string().optional(),
   phone_primary:    z.string().max(20).optional(),

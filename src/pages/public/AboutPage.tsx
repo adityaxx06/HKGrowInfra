@@ -69,6 +69,46 @@ export function AboutPage() {
         </FadeInWhenVisible>
       </section>
 
+      {/* ── Corporate Details / CIN Section ─────────────────────────────────── */}
+      {(settings?.cin_number || settings?.gst_number || settings?.rera_number || settings?.established_year) && (
+        <section className="bg-surface py-20 border-y border-gray-200/60">
+          <div className="container-page">
+            <FadeInWhenVisible className="mb-12 text-center">
+              <p className="eyebrow mb-3 justify-center">Corporate Credibility</p>
+              <h2 className="font-display text-2xl font-medium text-navy-800 lg:text-3xl">
+                Registration &amp; Legal Details
+              </h2>
+            </FadeInWhenVisible>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {settings?.cin_number && (
+                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">CIN Number</p>
+                  <p className="mt-2 font-mono text-sm font-medium text-navy-800">{settings.cin_number}</p>
+                </div>
+              )}
+              {settings?.gst_number && (
+                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">GST Number</p>
+                  <p className="mt-2 font-mono text-sm font-medium text-navy-800">{settings.gst_number}</p>
+                </div>
+              )}
+              {settings?.rera_number && (
+                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">RERA Registration</p>
+                  <p className="mt-2 font-mono text-sm font-medium text-navy-800">{settings.rera_number}</p>
+                </div>
+              )}
+              {settings?.established_year && (
+                <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gold-600">Established Year</p>
+                  <p className="mt-2 font-display text-lg font-medium text-navy-800">{settings.established_year}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── 4. Milestones timeline ───────────────────────────────────────
       {journey.milestones && journey.milestones.length > 0 && (
         <section className="bg-surface py-24 lg:py-28">

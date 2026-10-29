@@ -42,6 +42,10 @@ export interface WebsiteSettings {
   seo_og_image_path: string | null;
   schema_org_json: Record<string, unknown> | null;
   admin_alert_email: string | null;
+  cin_number: string | null;
+  gst_number: string | null;
+  rera_number: string | null;
+  established_year: string | null;
   updated_at: string;
 }
 

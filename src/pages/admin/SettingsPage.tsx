@@ -29,6 +29,10 @@ export function SettingsPage() {
       reset({
         company_name:      settings.company_name,
         tagline:           settings.tagline ?? '',
+        cin_number:        settings.cin_number ?? '',
+        gst_number:        settings.gst_number ?? '',
+        rera_number:       settings.rera_number ?? '',
+        established_year:  settings.established_year ?? '',
         mission:           settings.mission ?? '',
         vision:            settings.vision ?? '',
         phone_primary:     settings.phone_primary ?? '',
@@ -73,6 +77,14 @@ export function SettingsPage() {
           <FormSection title="Company" description="Core identity shown across the site.">
             <Input label="Company Name" required error={errors.company_name?.message} {...register('company_name')} />
             <Input label="Tagline" placeholder="Building Dreams, Delivering Trust" {...register('tagline')} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input label="CIN Number" placeholder="U45200UP2010PTC..." {...register('cin_number')} />
+              <Input label="GST Number" placeholder="09AAAAA0000A1Z5" {...register('gst_number')} />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input label="RERA Registration No." placeholder="UPRERAPRJ..." {...register('rera_number')} />
+              <Input label="Established Year" placeholder="2010" {...register('established_year')} />
+            </div>
             <Textarea label="Mission Statement" rows={3} {...register('mission')} />
             <Textarea label="Vision Statement" rows={3} {...register('vision')} />
           </FormSection>
