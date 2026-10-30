@@ -49,6 +49,9 @@ export function TeamMemberFormPage() {
         email:         member.email ?? '',
         phone:         member.phone ?? '',
         display_email: member.display_email ?? '',
+        linkedin_url:  member.social_links?.linkedin ?? '',
+        instagram_url: member.social_links?.instagram ?? '',
+        twitter_url:   member.social_links?.twitter ?? '',
         rank_order:    member.rank_order,
         is_active:     member.is_active,
         is_founder:    member.is_founder,
@@ -67,9 +70,25 @@ export function TeamMemberFormPage() {
   const photoChanged = JSON.stringify(photo) !== JSON.stringify(initialPhoto);
 
   function onSubmit(values: TeamMemberFormValues) {
+    const social_links: Record<string, string> = {};
+    if (values.linkedin_url) social_links.linkedin = values.linkedin_url;
+    if (values.instagram_url) social_links.instagram = values.instagram_url;
+    if (values.twitter_url) social_links.twitter = values.twitter_url;
+
     const payload = {
-      ...values,
-      photo_path: photo[0]?.path ?? null,
+      full_name:     values.full_name,
+      position:      values.position,
+      department:    values.department,
+      bio:           values.bio,
+      short_bio:     values.short_bio,
+      email:         values.email,
+      phone:         values.phone,
+      display_email: values.display_email,
+      rank_order:    values.rank_order,
+      is_active:     values.is_active,
+      is_founder:    values.is_founder,
+      social_links,
+      photo_path:    photo[0]?.path ?? null,
     };
 
     if (isEdit && id) {
@@ -142,6 +161,14 @@ export function TeamMemberFormPage() {
               onChange={setPhoto}
               maxImages={1}
             />
+          </FormSection>
+
+          <FormSection title="Social Media Profiles" description="Optional social profile URLs shown on the About page.">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Input label="LinkedIn URL" type="url" placeholder="https://linkedin.com/in/..." error={errors.linkedin_url?.message} {...register('linkedin_url')} />
+              <Input label="Instagram URL" type="url" placeholder="https://instagram.com/..." error={errors.instagram_url?.message} {...register('instagram_url')} />
+              <Input label="Twitter / X URL" type="url" placeholder="https://twitter.com/..." error={errors.twitter_url?.message} {...register('twitter_url')} />
+            </div>
           </FormSection>
 
           <div className="flex items-center gap-3 border-t border-gray-100 pt-6">
