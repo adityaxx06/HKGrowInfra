@@ -1,13 +1,17 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import type { WebsiteSettings } from '@/types/database';
 import { ROUTES } from '@/constants/routes';
 
-// Stable CDN URL — freely licensed (Pexels free license, no attribution required)
-const HERO_IMAGE =
-  'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1920&q=80';
+const HERO_IMAGES = [
+  'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1920&q=80',
+  'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&q=80',
+  'https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg?auto=compress&cs=tinysrgb&w=1920&q=80',
+  'https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1920&q=80',
+];
 
 interface HeroBlock {
   badge_text?: string;
@@ -25,9 +29,14 @@ interface Props {
 }
 
 export function HeroSection({ hero, settings }: Props) {
-  const { scrollY } = useScroll();
-  // Parallax: background moves at 40% of scroll speed
-  const bgY = useTransform(scrollY, [0, 600], ['0%', '24%']);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, []);
 
   function scrollDown() {
     window.scrollTo({ top: window.innerHeight * 0.85, behavior: 'smooth' });
@@ -35,33 +44,35 @@ export function HeroSection({ hero, settings }: Props) {
 
   return (
     <section className="relative -mt-20 flex min-h-screen items-center" style={{ overflow: 'hidden' }}>
-      {/* ── Background image with parallax ── */}
-      <motion.div
-        style={{ y: bgY, top: '-10%', bottom: '-10%', left: 0, right: 0, position: 'absolute' }}
-        aria-hidden="true"
-      >
-        <img
-          src={HERO_IMAGE}
-          alt="Premium real estate backdrop"
-          loading="eager"
-          decoding="async"
-          className="h-full w-full object-cover"
-        />
-      </motion.div>
+      {/* ── Background image slideshow with crossfade & zoom effect ── */}
+      <div className="absolute inset-0" aria-hidden="true">
+        <AnimatePresence mode="popLayout">
+          <motion.img
+            key={currentImageIndex}
+            src={HERO_IMAGES[currentImageIndex]}
+            alt="Premium real estate backdrop"
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: 'easeInOut' }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </AnimatePresence>
+      </div>
 
       {/* ── Dark gradient overlay ── */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-900/80 to-navy-900/55"
+        className="absolute inset-0 bg-gradient-to-r from-navy-900/95 via-navy-900/80 to-navy-900/55 z-10"
         aria-hidden="true"
       />
       {/* Bottom vignette for section transition */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-navy-900/70 to-transparent"
+        className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-navy-900/70 to-transparent z-10"
         aria-hidden="true"
       />
 
       {/* ── Content ── */}
-      <div className="container-page relative z-10 py-20 sm:py-28 lg:py-36">
+      <div className="container-page relative z-20 py-20 sm:py-28 lg:py-36">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
@@ -118,11 +129,25 @@ export function HeroSection({ hero, settings }: Props) {
         </motion.div>
       </div>
 
+      {/* ── Slide indicators ── */}
+      <div className="absolute bottom-10 right-10 z-25 hidden items-center gap-2 sm:flex">
+        {HERO_IMAGES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentImageIndex(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+            className={`h-2 rounded-full transition-all duration-500 ${
+              idx === currentImageIndex ? 'w-8 bg-gold-400' : 'w-2 bg-white/50 hover:bg-white'
+            }`}
+          />
+        ))}
+      </div>
+
       {/* ── Scroll indicator ── */}
       <button
         onClick={scrollDown}
         aria-label="Scroll down"
-        className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white/90 transition-colors duration-500"
+        className="absolute bottom-10 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white/90 transition-colors duration-500"
       >
         <span className="text-[11px] font-medium tracking-wider-luxe uppercase">Scroll</span>
         <ChevronDown className="h-4 w-4 animate-bounce-slow" />
