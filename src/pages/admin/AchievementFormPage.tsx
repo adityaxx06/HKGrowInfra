@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAdminAchievement, useCreateAchievement, useUpdateAchievement } from '@/hooks/useAchievements';
+import { useAdminTeamMembers } from '@/hooks/useTeam';
 import { AdminPageHeader } from '@/components/shared/AdminPageHeader';
 import { QueryBoundary } from '@/components/shared/QueryBoundary';
 import { FormSection } from '@/components/forms/FormSection';
@@ -23,6 +24,7 @@ export function AchievementFormPage() {
   const toast = useToast();
 
   const { data: item, isLoading, error, refetch } = useAdminAchievement(id ?? '');
+  const { data: teamMembers } = useAdminTeamMembers();
   const { mutate: create, isPending: isCreating } = useCreateAchievement();
   const { mutate: update, isPending: isUpdating } = useUpdateAchievement();
   const isSaving = isCreating || isUpdating;
@@ -31,7 +33,7 @@ export function AchievementFormPage() {
   const [initialPhotos, setInitialPhotos] = useState<ImageEntry[]>([]);
 
   const {
-    register, handleSubmit, reset,
+    register, handleSubmit, reset, setValue,
     formState: { errors, isDirty },
   } = useForm<AchievementFormValues>({
     resolver: zodResolver(achievementSchema),
@@ -111,7 +113,31 @@ export function AchievementFormPage() {
             </label>
           </FormSection>
 
-          <FormSection title="Team Member Info" description="Member name and position/role.">
+          <FormSection title="Team Member Info" description="Select from existing team members to auto-fill details, or enter manually.">
+            <div className="mb-4">
+              <label className="mb-1.5 block text-sm font-medium text-ink-primary">
+                Select Team Member (Optional Auto-fill)
+              </label>
+              <select
+                className="w-full rounded-md border border-gray-300 px-3.5 py-2.5 text-base text-ink-primary focus:border-navy-600 focus:ring-1 focus:ring-navy-600 bg-white"
+                onChange={(e) => {
+                  const memberId = e.target.value;
+                  const found = teamMembers?.find((m) => m.id === memberId);
+                  if (found) {
+                    setValue('member_name', found.full_name, { shouldDirty: true });
+                    setValue('position', found.position, { shouldDirty: true });
+                  }
+                }}
+                defaultValue=""
+              >
+                <option value="" disabled>-- Choose from team directory (or type below) --</option>
+                {teamMembers?.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.full_name} — {m.position}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input label="Member Full Name" required placeholder="Aarav Sharma" error={errors.member_name?.message} {...register('member_name')} />
               <Textarea label="Position / Role" required rows={2} placeholder="Senior Project Manager" error={errors.position?.message} {...register('position')} />
